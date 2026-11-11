@@ -90,8 +90,8 @@ label.f>span{display:block;font-size:13px;color:var(--mut);margin-bottom:4px}
 .checks{display:flex;flex-wrap:wrap;gap:8px}
 .checks label{display:flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--line);border-radius:12px;font-size:13px}
 .checks input{accent-color:var(--g)}
-.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
-.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--mut);padding:6px 0;border-radius:12px}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,1fr);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;color:var(--mut);padding:6px 0;border-radius:12px}
 .tabs button.on{color:var(--g2);font-weight:700}
 .tabs button.on svg.i{stroke:var(--g)}
 #toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:var(--ink);color:#fff;padding:11px 16px;border-radius:14px;font-size:14px;max-width:92%;transition:.25s;z-index:20;box-shadow:0 8px 24px rgba(0,0,0,.2)}
@@ -101,12 +101,33 @@ label.f>span{display:block;font-size:13px;color:var(--mut);margin-bottom:4px}
 .sheet{background:#fff;width:100%;max-width:640px;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:80vh;overflow:auto}
 .alt{width:100%;text-align:left;padding:12px;border:1px solid var(--line);border-radius:14px;margin:6px 0;display:flex;justify-content:space-between;gap:8px}
 .alt:active{background:var(--gxl)}
+.alt .tag{align-self:center}
 .chart{width:100%;height:auto;display:block}
-.legend{display:flex;gap:14px;font-size:12px;color:var(--mut);margin-top:6px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--mut);margin-top:6px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
 .empty{text-align:center;color:var(--mut);padding:24px 8px}
 .stepper{display:flex;align-items:center;gap:8px}
 .stepper button{width:34px;height:34px;border-radius:10px;background:var(--soft);border:1px solid var(--line);font-weight:700}
+.bar.o{background:#ffedd5}.bar.o>span{background:linear-gradient(90deg,#fb923c,#ea580c)}
+.tag.or{background:#ffedd5;color:#9a3412}
+.stat.or{background:#fff7ed}
+.weekdots{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px}
+.weekdots div{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;border-radius:12px;background:var(--soft);font-size:11px;color:var(--mut)}
+.weekdots div b{font-size:13px;color:var(--ink)}
+.weekdots div.on{background:#ffedd5;color:#9a3412}
+.weekdots div.today{outline:2px solid #fdba74}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);background:var(--soft);border-radius:12px;padding:3px;gap:2px}
+.seg button{padding:9px 0;border-radius:10px;font-size:12.5px;font-weight:600;color:var(--mut)}
+.seg button.on{background:#fff;color:var(--g2);box-shadow:0 1px 3px rgba(15,23,42,.12)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .wd{font-size:11px;color:var(--mut);text-align:center}
+.cal .cell{aspect-ratio:1;border-radius:8px;display:grid;place-items:center;font-size:11px;color:#0f172a}
+.cal .cell.off{background:transparent}
+.area{width:100%;display:flex;align-items:center;gap:10px;text-align:left;padding:12px 4px;border-bottom:1px solid var(--line);font-size:18px;color:var(--mut)}
+.area:last-child{border-bottom:0}.area b{color:var(--ink);font-size:15px}
+.area .dot{width:12px;height:12px;border-radius:4px;flex:none}
+.hb{margin:10px 0}.hb .bar{margin-top:4px}
+#tip{position:absolute;z-index:25;display:none;background:var(--ink);color:#fff;font-size:12.5px;padding:7px 10px;border-radius:10px;max-width:260px;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.2)}
 table.h{width:100%;border-collapse:collapse;font-size:13px}
 table.h th,table.h td{padding:8px 4px;border-bottom:1px solid var(--line);text-align:left}
 table.h th{color:var(--mut);font-weight:600}
@@ -120,6 +141,7 @@ table.h th{color:var(--mut);font-weight:600}
 <main id="view"></main>
 <nav class="tabs" id="tabs"></nav>
 <div id="toast" role="status" aria-live="polite"></div>
+<div id="tip"></div>
 <div id="modal" class="modal hidden"></div>
 
 <script>
@@ -158,6 +180,7 @@ const ICON = {
   bag: '<path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/>',
   x: '<path d="M6 6l12 12M18 6 6 18"/>',
   pause: '<path d="M9 5v14M15 5v14"/>',
+  run: '<circle cx="14.5" cy="4.5" r="2"/><path d="M7 21l3-5 3 2v4M5 11l3.5-3.5 4.5 1 2.5 3.5 3 1M10 16l1.5-7"/>',
   fire: '<path d="M12 22c4 0 7-3 7-7 0-5-5-7-5-12-3 2-4 5-4 7-1-1-2-2-2-4-2 2-3 5-3 9 0 4 3 7 7 7z"/>'
 };
 const ic = (n, st = '') => `<svg class="i" viewBox="0 0 24 24" ${st ? `style="${st}"` : ''}>${ICON[n]}</svg>`;
@@ -285,6 +308,7 @@ const DEFAULT_PROFILE = {
     {id:'ceia',   name:'Ceia (opcional)',time:'21:00', enabled:true, remind:false, optional:true,  away:false}
   ],
   subs: {},
+  exercise: { weeklyGoal: 150, remind: false, remindTime: '18:30' },
   setupDone: false
 };
 
@@ -299,6 +323,7 @@ function migrate(o) {
   const ms = (o.profile || {}).meals || [];
   p.meals = b.profile.meals.map(m => Object.assign({}, m, ms.find(x => x.id === m.id) || {}));
   p.subs = p.subs || {};
+  p.exercise = Object.assign({}, b.profile.exercise, (o.profile || {}).exercise || {});
   p.restrictions = Array.isArray(p.restrictions) ? p.restrictions : [];
   return { profile: p, days: o.days || {}, savedAt: o.savedAt || 0 };
 }
@@ -352,9 +377,9 @@ async function initRemote() {
 /* ---------- dia atual ---------- */
 function plannedMeals(p = S.profile) { return p.meals.filter(m => m.enabled && !m.optional).length; }
 function day(k = dateKey()) {
-  if (!S.days[k]) S.days[k] = { water: [], meals: {}, fired: {}, menuPick: {}, subs: {}, goal: S.profile.waterGoal, planned: plannedMeals() };
+  if (!S.days[k]) S.days[k] = { water: [], meals: {}, fired: {}, menuPick: {}, subs: {}, ex: [], goal: S.profile.waterGoal, planned: plannedMeals() };
   const d = S.days[k];
-  d.water = d.water || []; d.meals = d.meals || {}; d.fired = d.fired || {}; d.menuPick = d.menuPick || {}; d.subs = d.subs || {};
+  d.water = d.water || []; d.meals = d.meals || {}; d.fired = d.fired || {}; d.menuPick = d.menuPick || {}; d.subs = d.subs || {}; d.ex = d.ex || [];
   return d;
 }
 function syncTodaySnapshot() { const d = day(); d.goal = S.profile.waterGoal; d.planned = plannedMeals(); }
@@ -508,6 +533,7 @@ function remindersFor(p = S.profile) {
   const list = [];
   if (p.notif.water && !p.waterPaused) waterSchedule(p).forEach(r => list.push({ key: 'w@' + r.time, at: r.min % 1440, kind: 'water', r }));
   if (p.notif.meals) p.meals.filter(x => x.enabled && x.remind).forEach(x => list.push({ key: 'm' + x.id + '@' + x.time, at: (toMin(x.time) - (+p.mealReminderMin || 0) + 1440) % 1440, kind: 'meal', meal: x }));
+  if (p.exercise && p.exercise.remind) list.push({ key: 'ex@' + p.exercise.remindTime, at: toMin(p.exercise.remindTime), kind: 'ex' });
   if (p.notif.log) list.push({ key: 'log', at: (toMin(p.sleep) - 120 + 1440) % 1440, kind: 'log' });
   return list;
 }
@@ -529,6 +555,9 @@ function tick() {
       if ((d.meals[it.meal.id] || {}).done) continue;
       const items = mealItems(it.meal, d).map(x => x.f.n).join(', ');
       notify(`${it.meal.name} às ${it.meal.time}`, `Sugestão: ${items}.`, 'refeicao-' + it.meal.id);
+    } else if (it.kind === 'ex') {
+      if (d.ex.length) continue;
+      notify('Hora de se movimentar 🏃', 'Que tal uma caminhada ou alongamento? Até 10 minutos já contam.', 'exercicio');
     } else if (it.kind === 'log') {
       if (totalWater(d) >= d.goal) continue;
       notify('Registre sua água 📝', `Hoje constam ${ml(totalWater(d))} de ${ml(d.goal)}. Se bebeu mais, registre.`, 'registro');
@@ -554,6 +583,7 @@ async function scheduleNative() {
       let title, body;
       if (it.kind === 'water') { title = 'Hora de beber água 💧'; body = `Beba cerca de ${ml(it.r.ml)}. Meta do dia: ${ml(p.waterGoal)}.`; }
       else if (it.kind === 'meal') { title = `${it.meal.name} às ${it.meal.time}`; body = 'Abra o app para ver as sugestões e marcar como concluída.'; }
+      else if (it.kind === 'ex') { title = 'Hora de se movimentar 🏃'; body = 'Uma caminhada ou alongamento curto já conta. Registre no app.'; }
       else { title = 'Registre sua água 📝'; body = 'Confira se registrou toda a água que bebeu hoje.'; }
       list.push({ id: id++, title, body, channelId: 'vida', schedule: { on: { hour, minute }, allowWhileIdle: true } });
     }
@@ -594,7 +624,7 @@ function toggle(attrs, checked) { return `<label class="toggle"><input type="che
 
 /* ---------- telas ---------- */
 let TAB = S.profile.setupDone ? 'inicio' : 'perfil';
-const TABS = [['inicio','Início','home'],['agua','Água','drop'],['alimentacao','Alimentação','food'],['historico','Histórico','chart'],['perfil','Perfil','user']];
+const TABS = [['inicio','Início','home'],['agua','Água','drop'],['alimentacao','Refeições','food'],['exercicios','Exercícios','run'],['painel','Painel','chart'],['perfil','Perfil','user']];
 
 function greeting() { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite'; }
 function todayProgress(d = day()) {
@@ -633,12 +663,16 @@ function viewInicio() {
     <div class="stat blue"><div class="k">${ic('clock','width:15px;height:15px')}Próxima água</div><div class="v">${p.waterPaused || !p.notif.water ? 'Pausado' : (nw.tomorrow ? 'Amanhã ' : '') + nw.time}</div><div class="small mut">${p.waterPaused ? '' : '≈ ' + ml(nw.ml)}</div></div>
     <div class="stat green"><div class="k">${ic('food','width:15px;height:15px')}Próxima refeição</div><div class="v">${nm ? (nm.tomorrow ? 'Amanhã ' : '') + nm.meal.time : '—'}</div><div class="small mut">${nm ? esc(nm.meal.name) : 'Nenhuma ativa'}</div></div>
   </div>
+  <button class="stat or" data-tab="exercicios" style="width:100%;text-align:left;margin-top:10px;display:flex;align-items:center;gap:12px">
+    <div style="flex:1"><div class="k">${ic('run','width:15px;height:15px')}Exercício</div><div class="v">${exMinOf(d)} min hoje</div><div class="small mut">Semana: ${weekEx()} de ${+p.exercise.weeklyGoal || 150} min ativos</div></div>
+    <span class="btn sm" style="background:#ea580c">+ Registrar</span></button>
   <div class="card">
     <h2>Resumo dos hábitos de hoje</h2>
     <ul class="list">
       <li><span>Água</span><span class="tag ${tw >= d.goal ? 'ok' : 'blue'}">${Math.round(pr.wp * 100)}%</span></li>
       <li><span>Refeições principais</span><span class="tag ${pr.done >= d.planned ? 'ok' : ''}">${pr.done} de ${d.planned}</span></li>
       ${mealsSorted().filter(m => m.enabled).map(m => { const done = (d.meals[m.id] || {}).done; return `<li><span class="mut">${m.time} · ${esc(m.name)}</span>${done ? `<span class="tag ok">Feito</span>` : (toMin(m.time) < nowMin() && toMin(m.time) >= toMin(p.wake) ? `<span class="tag ${m.optional ? '' : 'warn'}">Não marcado</span>` : `<span class="tag">Agendado</span>`)}</li>`; }).join('')}
+      <li><span>Exercício hoje</span><span class="tag ${exMinOf(d) ? 'or' : ''}">${exMinOf(d) ? exMinOf(d) + ' min' : 'Nenhum ainda'}</span></li>
       <li><span>${ic('fire','width:16px;height:16px;vertical-align:-3px;color:#ea580c')} Sequência de dias com rotina cumprida</span><span class="tag ${st ? 'ok' : ''}">${st} dia${st === 1 ? '' : 's'}</span></li>
     </ul>
   </div>`;
@@ -720,14 +754,84 @@ function viewAlimentacao() {
   ${Object.keys(p.subs).length ? `<button class="btn ghost block" data-act="resetSubs">Desfazer todas as trocas salvas</button>` : ''}`;
 }
 
-/* ---------- histórico ---------- */
+/* ---------- exercícios ---------- */
+const EX = { caminhada:'Caminhada', corrida:'Corrida', bicicleta:'Bicicleta', musculacao:'Musculação', funcional:'Treino em casa / funcional', alongamento:'Alongamento', danca:'Dança', esporte:'Futebol / esportes', escada:'Subir escadas', outro:'Outro' };
+const INT = { leve:'Leve', moderada:'Moderada', intensa:'Intensa' };
+const EX_SUG = [
+  ['caminhada', 10, 'leve', 'Caminhada de 10 min depois do almoço'],
+  ['alongamento', 5, 'leve', 'Alongamento de 5 min entre trabalho e estudo'],
+  ['escada', 5, 'moderada', 'Escada em vez do elevador'],
+  ['caminhada', 20, 'moderada', 'Caminhada de 20 min no fim do dia'],
+  ['funcional', 15, 'moderada', 'Treino em casa de 15 min']
+];
+const C_WATER = '#0284c7', C_FOOD = '#16a34a', C_EX = '#ea580c';
+const exEq = x => (+x.min || 0) * (x.int === 'intensa' ? 2 : 1);     // minutos intensos contam em dobro (referência OMS)
+const exMinOf = d => ((d || {}).ex || []).reduce((a, x) => a + (+x.min || 0), 0);
+function weekStart(dt = new Date()) { const x = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()); x.setDate(x.getDate() - (x.getDay() + 6) % 7); return x; }
+function weekKeys(ws) { return [...Array(7)].map((_, i) => { const d = new Date(ws); d.setDate(ws.getDate() + i); return dateKey(d); }); }
+function weekEx(ws = weekStart()) { return weekKeys(ws).reduce((a, k) => a + ((S.days[k] || {}).ex || []).reduce((b, x) => b + exEq(x), 0), 0); }
+let exForm = { type: 'caminhada', min: 20, int: 'leve' };
+function addExercise(type, min, int) {
+  min = Math.round(+min);
+  if (!(min > 0 && min <= 600)) return toast('Informe de 1 a 600 minutos');
+  if (!EX[type]) type = 'outro';
+  day().ex.push({ t: Date.now(), type, min, int: INT[int] ? int : 'leve' });
+  save();
+  toast(`${EX[type]} · ${min} min registrados 🏃` + (min >= 20 ? ' — lembre de beber água 💧' : ''), 3500);
+  render();
+}
+
+function viewExercicios() {
+  const p = S.profile, d = day(), goal = +p.exercise.weeklyGoal || 150, wk = weekEx();
+  const wkDays = weekKeys(weekStart());
+  const activeDays = wkDays.filter(k => ((S.days[k] || {}).ex || []).length).length;
+  return `
+  <div class="card">
+    <div class="between"><div><h2 style="margin:0">Esta semana</h2><div class="small mut">Minutos ativos (atividade intensa conta em dobro)</div></div><span class="tag or">${activeDays} dia${activeDays === 1 ? '' : 's'} ativo${activeDays === 1 ? '' : 's'}</span></div>
+    <div class="row" style="margin:10px 0 8px"><div style="font-size:28px;font-weight:800;color:#c2410c">${wk} min</div><div class="mut">de ${goal} min</div></div>
+    <div class="bar o"><span style="width:${Math.round(clamp(wk / goal, 0, 1) * 100)}%"></span></div>
+    <div class="weekdots">${wkDays.map(k => { const m = exMinOf(S.days[k]); return `<div class="${m ? 'on' : ''} ${k === dateKey() ? 'today' : ''}" data-tip="${esc(keyToDate(k).toLocaleDateString('pt-BR', { weekday: 'long' }))}: ${m} min"><span>${keyToDate(k).toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '').slice(0, 3)}</span><b>${m || '·'}</b></div>`; }).join('')}</div>
+  </div>
+  <div class="card">
+    <h2>Registro rápido</h2>
+    <div class="small mut">Sugestões leves para encaixar na rotina de trabalho e estudo</div>
+    ${EX_SUG.map((s, i) => `<button class="alt" data-exsug="${i}"><span><b>${esc(s[3])}</b><br><span class="small mut">${EX[s[0]]} · ${s[1]} min · ${INT[s[2]]}</span></span><span class="tag or">+ Registrar</span></button>`).join('')}
+  </div>
+  <div class="card">
+    <h2>Registrar exercício</h2>
+    <label class="f"><span>Atividade</span><select class="in" id="exType">${Object.entries(EX).map(([k, n]) => `<option value="${k}" ${exForm.type === k ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select></label>
+    <label class="f"><span>Duração (minutos)</span><input class="in" id="exMin" type="number" inputmode="numeric" min="1" max="600" value="${exForm.min}"></label>
+    <div class="small mut">Intensidade</div>
+    <div class="opts">${Object.entries(INT).map(([k, n]) => `<button class="opt ${exForm.int === k ? 'on' : ''}" data-exint="${k}">${n}</button>`).join('')}</div>
+    <div class="small mut">Leve: conversa com facilidade · Moderada: respira mais rápido, mas ainda fala · Intensa: difícil falar</div>
+    <button class="btn block" data-act="addEx" style="margin-top:12px;background:${C_EX}">Registrar</button>
+  </div>
+  <div class="card">
+    <h2>Hoje</h2>
+    ${d.ex.length ? `<ul class="list">${d.ex.map((x, i) => `<li><span><b>${esc(EX[x.type] || x.type)}</b><br><span class="small mut">${new Date(x.t).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })} · ${INT[x.int] || ''}</span></span><span class="row"><b>${x.min} min</b><button class="btn sm ghost" data-delex="${i}" aria-label="Remover">${ic('x', 'width:16px;height:16px')}</button></span></li>`).join('')}</ul>` : '<div class="empty">Nenhum exercício registrado hoje.</div>'}
+  </div>
+  <div class="card">
+    <h2>Configurações</h2>
+    <label class="f"><span>Meta semanal de minutos ativos (editável)</span><input class="in" id="exGoal" type="number" inputmode="numeric" min="10" max="2000" step="10" value="${goal}"></label>
+    <button class="btn sec" data-act="saveExGoal">Salvar meta semanal</button>
+    <div class="sw" style="margin-top:8px"><div><b>Lembrete para se movimentar</b><div class="small mut">Só avisa se você ainda não registrou exercício no dia</div></div>${toggle('data-exremind="1"', p.exercise.remind)}</div>
+    <div class="sw"><span>Horário do lembrete</span><input class="in" type="time" data-extime="1" value="${p.exercise.remindTime}" style="width:auto"></div>
+    <p class="small mut">Referência da OMS: 150 min/semana de atividade moderada. É uma referência de saúde, não meta de peso. Comece leve e, se tiver alguma condição de saúde, procure orientação profissional.</p>
+  </div>`;
+}
+
+/* ---------- estatísticas ---------- */
 function dayStats(k) {
   const d = S.days[k]; if (!d) return null;
   const w = totalWater(d), goal = d.goal || S.profile.waterGoal, planned = d.planned ?? plannedMeals();
   const done = S.profile.meals.filter(m => !m.optional && (d.meals[m.id] || {}).done).length;
-  const recorded = (d.water || []).length > 0 || Object.values(d.meals || {}).some(v => v.done);
-  return { k, w, goal, planned, done, recorded, waterOk: w >= goal, mealsOk: planned > 0 && done >= planned };
+  const ex = d.ex || [];
+  const recorded = (d.water || []).length > 0 || Object.values(d.meals || {}).some(v => v.done) || ex.length > 0;
+  const wp = goal ? clamp(w / goal, 0, 1) : 0, mp = planned ? clamp(done / planned, 0, 1) : 0;
+  return { k, w, goal, planned, done, recorded, waterOk: w >= goal, mealsOk: planned > 0 && done >= planned,
+    exMin: exMinOf(d), exEq: ex.reduce((a, x) => a + exEq(x), 0), wp, mp, score: Math.round((wp + mp) / 2 * 100) };
 }
+function emptyStats(k) { return { k, w: 0, goal: S.profile.waterGoal, planned: plannedMeals(), done: 0, recorded: false, waterOk: false, mealsOk: false, exMin: 0, exEq: 0, wp: 0, mp: 0, score: 0 }; }
 function streak() {
   let n = 0; const t = new Date();
   const today = dayStats(dateKey(t));
@@ -741,60 +845,172 @@ function lastDays(n) {
   return out;
 }
 function firstRecorded() { return Object.keys(S.days).sort().find(k => (dayStats(k) || {}).recorded); }
-function chartWater(keys) {
-  const W = 340, H = 170, pl = 34, pb = 26, pt = 10, bw = (W - pl - 8) / keys.length;
-  const stats = keys.map(k => dayStats(k) || { w: 0, goal: S.profile.waterGoal });
-  const max = Math.max(1000, ...stats.map(s => Math.max(s.w, s.goal))) * 1.1;
-  const y = v => pt + (H - pt - pb) * (1 - v / max);
+
+/* ---------- gráficos (SVG, toque mostra o valor) ---------- */
+function roundTop(x, y, w, h, r) { if (h <= 0.5) return ''; r = Math.min(r, h, w / 2); return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`; }
+function barChart(o) {
+  const n = o.values.length, W = 340, H = o.H || 170, pl = 36, pr = 6, pt = 12, pb = 24;
+  const goals = Array.isArray(o.goal) ? o.goal : (o.goal != null ? o.values.map(() => o.goal) : null);
+  const top = Math.max(o.min || 1, ...o.values, ...(goals || [0]));
+  const max = top * 1.12, y = v => pt + (H - pt - pb) * (1 - v / max);
+  const bw = (W - pl - pr) / n, w = Math.max(3, Math.min(bw - 2, 30)), every = Math.ceil(n / 8);
   let g = '';
-  [0, .5, 1].forEach(f => { const v = Math.round(max * f / 100) * 100; g += `<line x1="${pl}" x2="${W - 4}" y1="${y(v)}" y2="${y(v)}" stroke="#eef2f7"/><text x="${pl - 4}" y="${y(v) + 3}" font-size="9" text-anchor="end" fill="#94a3b8">${(v / 1000).toFixed(1)}L</text>`; });
-  stats.forEach((s, i) => {
-    const w = Math.min(bw * 0.64, 34), x = pl + i * bw + (bw - w) / 2, h = (H - pt - pb) - (y(s.w) - pt);
-    g += `<rect x="${x}" y="${y(s.w)}" width="${w}" height="${Math.max(0, h)}" rx="5" fill="${s.w >= s.goal ? '#16a34a' : '#38bdf8'}"/>`;
-    g += `<line x1="${x - 3}" x2="${x + w + 3}" y1="${y(s.goal)}" y2="${y(s.goal)}" stroke="#0f172a" stroke-dasharray="3 2" stroke-width="1.2"/>`;
-    const dt = keyToDate(keys[i]);
-    g += `<text x="${x + w / 2}" y="${H - 8}" font-size="10" text-anchor="middle" fill="#64748b">${dt.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '')}</text>`;
+  [0, 0.5, 1].forEach(f => { const v = top * f; g += `<line x1="${pl}" x2="${W - pr}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" stroke="#eef2f7"/><text x="${pl - 4}" y="${(y(v) + 3).toFixed(1)}" font-size="9" text-anchor="end" fill="#94a3b8">${o.fmtAxis ? o.fmtAxis(v) : Math.round(v)}</text>`; });
+  o.values.forEach((v, i) => {
+    const x = pl + i * bw + (bw - w) / 2, h = Math.max(0, y(0) - y(v));
+    g += `<path d="${roundTop(x, y(v), w, h, 4)}" fill="${o.color(v, i)}"/>`;
+    if (goals) g += `<line x1="${(x - 2).toFixed(1)}" x2="${(x + w + 2).toFixed(1)}" y1="${y(goals[i]).toFixed(1)}" y2="${y(goals[i]).toFixed(1)}" stroke="#334155" stroke-dasharray="3 2" stroke-width="1.2"/>`;
+    if (i % every === 0) g += `<text x="${(x + w / 2).toFixed(1)}" y="${H - 8}" font-size="10" text-anchor="middle" fill="#64748b">${esc(o.labels[i])}</text>`;
+    g += `<rect x="${(pl + i * bw).toFixed(1)}" y="${pt}" width="${bw.toFixed(1)}" height="${H - pt - pb}" fill="transparent" data-tip="${esc(o.tip(i))}"/>`;
   });
-  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Água por dia">${g}</svg>`;
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.label || 'Gráfico')}">${g}</svg>`;
 }
-function chartMeals(keys) {
-  const W = 340, H = 130, pl = 34, pb = 26, pt = 10, bw = (W - pl - 8) / keys.length;
-  const stats = keys.map(k => dayStats(k) || { done: 0, planned: plannedMeals() });
-  const max = Math.max(5, ...stats.map(s => s.planned));
-  const y = v => pt + (H - pt - pb) * (1 - v / max);
-  let g = `<line x1="${pl}" x2="${W - 4}" y1="${y(max)}" y2="${y(max)}" stroke="#eef2f7"/><text x="${pl - 4}" y="${y(max) + 3}" font-size="9" text-anchor="end" fill="#94a3b8">${max}</text><text x="${pl - 4}" y="${y(0) + 3}" font-size="9" text-anchor="end" fill="#94a3b8">0</text>`;
-  stats.forEach((s, i) => {
-    const w = Math.min(bw * 0.64, 34), x = pl + i * bw + (bw - w) / 2;
-    g += `<rect x="${x}" y="${y(s.done)}" width="${w}" height="${Math.max(0, y(0) - y(s.done))}" rx="5" fill="${s.done >= s.planned ? '#16a34a' : '#86efac'}"/>`;
-    g += `<text x="${x + w / 2}" y="${H - 8}" font-size="10" text-anchor="middle" fill="#64748b">${keyToDate(keys[i]).getDate()}</text>`;
-  });
-  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Refeições por dia">${g}</svg>`;
+function hbars(rows, color) {
+  return rows.map(r => `<div class="hb" data-tip="${esc(r.tip || '')}"><div class="between small"><span>${esc(r.label)}</span><b>${esc(r.text)}</b></div><div class="bar" style="background:#f1f5f9;height:10px"><span style="width:${r.max ? Math.round(clamp(r.value / r.max, 0, 1) * 100) : 0}%;background:${color}"></span></div></div>`).join('');
 }
-function viewHistorico() {
+function kpi(label, value, sub, cls = '') { return `<div class="stat ${cls}"><div class="k">${esc(label)}</div><div class="v">${value}</div>${sub ? `<div class="small mut">${sub}</div>` : ''}</div>`; }
+const dayLabel = (k, n) => n <= 7 ? keyToDate(k).toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '').slice(0, 3) : String(keyToDate(k).getDate());
+const fmtL = v => (v / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + 'L';
+const SCORE_COLORS = ['#dcfce7', '#86efac', '#22c55e', '#15803d'];
+const scoreColor = s => s >= 75 ? SCORE_COLORS[3] : s >= 50 ? SCORE_COLORS[2] : s >= 25 ? SCORE_COLORS[1] : SCORE_COLORS[0];
+
+/* ---------- painel (dashboard) ---------- */
+let PAN = { sec: 'geral', range: 7 };
+function viewPainel() {
+  const segs = [['geral', 'Geral'], ['agua', 'Água'], ['alim', 'Alimentação'], ['ex', 'Exercícios']];
+  const head = `<div class="card" style="padding:12px">
+    <div class="seg">${segs.map(([k, n]) => `<button class="${PAN.sec === k ? 'on' : ''}" data-psec="${k}">${n}</button>`).join('')}</div>
+    <div class="between" style="margin-top:10px"><span class="small mut">Período</span><div class="opts" style="margin:0">${[7, 30].map(r => `<button class="opt ${PAN.range === r ? 'on' : ''}" data-prange="${r}">${r} dias</button>`).join('')}</div></div></div>`;
   const first = firstRecorded();
-  if (!first) return `<div class="card"><h2>Histórico e relatórios</h2><div class="empty">${ic('chart','width:40px;height:40px;color:#cbd5e1')}<p>Ainda não há registros. Assim que você registrar água ou marcar refeições, os gráficos e relatórios aparecem aqui — só com dados reais.</p></div></div>`;
-  const keys = lastDays(7).filter(k => k >= first);
-  const all = Object.keys(S.days).sort().filter(k => k >= first && k <= dateKey()).map(dayStats).filter(Boolean);
-  const wk = keys.map(k => dayStats(k)).filter(Boolean);
-  const avg = wk.length ? Math.round(wk.reduce((a, s) => a + s.w, 0) / keys.length) : 0;
-  const waterDays = wk.filter(s => s.waterOk).length, mealDays = wk.filter(s => s.mealsOk).length, fullDays = wk.filter(s => s.waterOk && s.mealsOk).length;
-  const totMeals = wk.reduce((a, s) => a + s.done, 0);
+  if (!first) return head + `<div class="card"><div class="empty">${ic('chart', 'width:40px;height:40px;color:#cbd5e1')}<p>Ainda não há registros. Registre água, refeições ou exercícios e o painel é montado só com os seus dados reais.</p></div></div>`;
+  const keys = lastDays(PAN.range).filter(k => k >= first);
+  const st = keys.map(k => dayStats(k) || emptyStats(k));
+  const note = keys.length < PAN.range ? `<p class="small mut" style="margin:-4px 4px 8px">Mostrando ${keys.length} dia${keys.length > 1 ? 's' : ''} — desde o seu primeiro registro.</p>` : '';
+  return head + note + ({ geral: panGeral, agua: panAgua, alim: panAlim, ex: panEx }[PAN.sec])(keys, st) + `<p class="small mut" style="text-align:center">Toque nas barras para ver os valores.</p>`;
+}
+
+function panGeral(keys, st) {
+  const n = keys.length, avgScore = Math.round(st.reduce((a, s) => a + s.score, 0) / n);
+  const full = st.filter(s => s.waterOk && s.mealsOk).length;
+  const avgW = Math.round(st.reduce((a, s) => a + s.w, 0) / n);
+  const mealsDone = st.reduce((a, s) => a + s.done, 0), mealsPlan = st.reduce((a, s) => a + s.planned, 0);
+  const exTot = st.reduce((a, s) => a + s.exMin, 0), exDays = st.filter(s => s.exMin > 0).length;
+  const goalEx = +S.profile.exercise.weeklyGoal || 150, wk = weekEx();
+  // calendário: últimas 5 semanas
+  const ws = weekStart(); ws.setDate(ws.getDate() - 28);
+  const first = firstRecorded(), today = dateKey();
+  let cal = '';
+  for (let i = 0; i < 35; i++) {
+    const d = new Date(ws); d.setDate(ws.getDate() + i); const k = dateKey(d);
+    if (k > today || k < first) { cal += `<div class="cell off"></div>`; continue; }
+    const s = dayStats(k) || emptyStats(k);
+    cal += `<div class="cell" style="background:${s.recorded ? scoreColor(s.score) : '#f1f5f9'}" data-tip="${esc(d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }))}: ${s.recorded ? s.score + '% · água ' + ml(s.w) + ' · ' + s.done + '/' + s.planned + ' refeições' + (s.exMin ? ' · ' + s.exMin + ' min exercício' : '') : 'sem registro'}">${d.getDate()}</div>`;
+  }
   return `
   <div class="grid2">
-    <div class="stat blue"><div class="k">Média de água (${keys.length} dia${keys.length > 1 ? 's' : ''})</div><div class="v">${ml(avg)}</div></div>
-    <div class="stat green"><div class="k">Refeições realizadas</div><div class="v">${totMeals}</div></div>
-    <div class="stat"><div class="k">Meta de água atingida</div><div class="v">${waterDays}/${keys.length} dias</div></div>
-    <div class="stat"><div class="k">Rotina completa</div><div class="v">${fullDays}/${keys.length} dias</div></div>
+    ${kpi('Pontuação média', avgScore + '%', 'água + refeições', 'green')}
+    ${kpi('Rotina cumprida', `${full}/${n}`, 'dias com água e refeições completas')}
+    ${kpi('Sequência atual', streak() + ' dia' + (streak() === 1 ? '' : 's'), 'rotina completa seguida')}
+    ${kpi('Exercício na semana', `${wk}/${goalEx} min`, 'minutos ativos', 'or')}
   </div>
-  <div class="card"><h2>Água — últimos dias</h2>${chartWater(keys)}
-    <div class="legend"><span><i style="background:#16a34a"></i>Meta atingida</span><span><i style="background:#38bdf8"></i>Abaixo da meta</span><span>- - meta</span></div></div>
-  <div class="card"><h2>Refeições concluídas</h2>${chartMeals(keys)}
-    <div class="legend"><span><i style="background:#16a34a"></i>Todas as principais</span><span><i style="background:#86efac"></i>Parcial</span></div>
-    <p class="small mut">Refeições completas em ${mealDays} de ${keys.length} dias. Sequência atual: ${streak()} dia(s).</p></div>
+  <div class="card"><h2>Pontuação por dia</h2>
+    ${barChart({ label: 'Pontuação diária', labels: keys.map(k => dayLabel(k, n)), values: st.map(s => s.score), min: 100, fmtAxis: v => Math.round(v) + '%', color: v => scoreColor(v), tip: i => `${keyToDate(keys[i]).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}: ${st[i].score}% (água ${Math.round(st[i].wp * 100)}%, refeições ${Math.round(st[i].mp * 100)}%)` })}
+    <div class="legend"><span>Pontuação = média de % da meta de água e % das refeições principais</span></div></div>
+  <div class="card"><h2>Calendário de hábitos</h2>
+    <div class="cal">${['S', 'T', 'Q', 'Q', 'S', 'S', 'D'].map(x => `<div class="wd">${x}</div>`).join('')}${cal}</div>
+    <div class="legend"><span><i style="background:#f1f5f9"></i>Sem registro</span><span><i style="background:${SCORE_COLORS[0]}"></i>&lt;25%</span><span><i style="background:${SCORE_COLORS[1]}"></i>25–49</span><span><i style="background:${SCORE_COLORS[2]}"></i>50–74</span><span><i style="background:${SCORE_COLORS[3]}"></i>75%+</span></div></div>
+  <div class="card"><h2>Resumo por área</h2>
+    <button class="area" data-psec="agua"><span class="dot" style="background:${C_WATER}"></span><span style="flex:1"><b>Água</b><br><span class="small mut">Média ${ml(avgW)}/dia · meta atingida em ${st.filter(s => s.waterOk).length}/${n} dias</span></span>›</button>
+    <button class="area" data-psec="alim"><span class="dot" style="background:${C_FOOD}"></span><span style="flex:1"><b>Alimentação</b><br><span class="small mut">${mealsDone}/${mealsPlan} refeições principais (${mealsPlan ? Math.round(mealsDone / mealsPlan * 100) : 0}%)</span></span>›</button>
+    <button class="area" data-psec="ex"><span class="dot" style="background:${C_EX}"></span><span style="flex:1"><b>Exercícios</b><br><span class="small mut">${exTot} min em ${exDays} dia${exDays === 1 ? '' : 's'} ativo${exDays === 1 ? '' : 's'}</span></span>›</button>
+  </div>
   <div class="card"><h2>Dia a dia</h2>
-    <table class="h"><thead><tr><th>Data</th><th>Água</th><th>Refeições</th><th>Rotina</th></tr></thead><tbody>
-    ${all.slice(-30).reverse().map(s => `<tr><td>${keyToDate(s.k).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</td><td>${ml(s.w)} <span class="small mut">/ ${(s.goal / 1000).toFixed(1)}L</span></td><td>${s.done}/${s.planned}</td><td>${s.waterOk && s.mealsOk ? '<span class="tag ok">Cumprida</span>' : (s.k === dateKey() ? '<span class="tag">Em andamento</span>' : '<span class="tag miss">Parcial</span>')}</td></tr>`).join('')}
+    <table class="h"><thead><tr><th>Data</th><th>Água</th><th>Refeições</th><th>Exerc.</th><th>Rotina</th></tr></thead><tbody>
+    ${st.slice().reverse().map(s => `<tr><td>${keyToDate(s.k).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}</td><td>${ml(s.w)}</td><td>${s.done}/${s.planned}</td><td>${s.exMin ? s.exMin + ' min' : '—'}</td><td>${s.waterOk && s.mealsOk ? '<span class="tag ok">Cumprida</span>' : (s.k === dateKey() ? '<span class="tag">Hoje</span>' : (s.recorded ? '<span class="tag miss">Parcial</span>' : '<span class="tag">Sem registro</span>'))}</td></tr>`).join('')}
     </tbody></table></div>`;
+}
+
+function panAgua(keys, st) {
+  const n = keys.length, total = st.reduce((a, s) => a + s.w, 0), avg = Math.round(total / n);
+  const ok = st.filter(s => s.waterOk).length;
+  const best = st.reduce((b, s) => s.w > b.w ? s : b, st[0]);
+  // distribuição por hora e dose mais usada
+  const hours = Array(24).fill(0), doses = {};
+  let entries = 0;
+  keys.forEach(k => ((S.days[k] || {}).water || []).forEach(x => { hours[new Date(x.t).getHours()] += x.ml; doses[x.ml] = (doses[x.ml] || 0) + 1; entries++; }));
+  const h0 = Math.floor(toMin(S.profile.wake) / 60), h1 = Math.min(23, Math.max(h0 + 1, Math.floor(toMin(S.profile.sleep) / 60) || 23));
+  const hrs = []; for (let h = h0; h <= h1; h++) hrs.push(h);
+  const topDose = Object.entries(doses).sort((a, b) => b[1] - a[1])[0];
+  return `
+  <div class="grid2">
+    ${kpi('Média por dia', ml(avg), `meta atual ${ml(S.profile.waterGoal)}`, 'blue')}
+    ${kpi('Total no período', fmtL(total), `${entries} registro${entries === 1 ? '' : 's'}`)}
+    ${kpi('Meta atingida', `${ok}/${n} dias`, `${Math.round(ok / n * 100)}% dos dias`)}
+    ${kpi('Melhor dia', ml(best.w), keyToDate(best.k).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }))}
+  </div>
+  <div class="card"><h2>Água por dia</h2>
+    ${barChart({ label: 'Água por dia', labels: keys.map(k => dayLabel(k, n)), values: st.map(s => s.w), goal: st.map(s => s.goal), min: 1000, fmtAxis: fmtL, color: (v, i) => st[i].waterOk ? C_FOOD : C_WATER, tip: i => `${keyToDate(keys[i]).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}: ${ml(st[i].w)} de ${ml(st[i].goal)}` })}
+    <div class="legend"><span><i style="background:${C_FOOD}"></i>Meta atingida</span><span><i style="background:${C_WATER}"></i>Abaixo da meta</span><span>- - meta do dia</span></div></div>
+  <div class="card"><h2>Em que horário você bebe</h2>
+    ${barChart({ label: 'Água por horário', H: 150, labels: hrs.map(h => h + 'h'), values: hrs.map(h => hours[h]), min: 250, fmtAxis: fmtL, color: () => C_WATER, tip: i => `${hrs[i]}h–${hrs[i] + 1}h: ${ml(hours[hrs[i]])} no período` })}
+    <p class="small mut">${entries ? `Dose mais usada: ${ml(+topDose[0])} (${topDose[1]}x). ` : ''}Horários com pouca água podem ganhar um lembrete extra na aba Água.</p></div>`;
+}
+
+function panAlim(keys, st) {
+  const n = keys.length, p = S.profile;
+  const done = st.reduce((a, s) => a + s.done, 0), plan = st.reduce((a, s) => a + s.planned, 0);
+  const full = st.filter(s => s.mealsOk).length;
+  const meals = mealsSorted().filter(m => m.enabled);
+  const per = meals.map(m => {
+    let c = 0, delays = [];
+    keys.forEach(k => { const v = ((S.days[k] || {}).meals || {})[m.id]; if (v && v.done) { c++; if (v.t) { const dt = new Date(v.t); const dm = dt.getHours() * 60 + dt.getMinutes() - toMin(m.time); if (dm > -180 && dm < 300) delays.push(dm); } } });
+    return { m, c, rate: c / n, delay: delays.length ? Math.round(delays.reduce((a, b) => a + b, 0) / delays.length) : null };
+  });
+  const main = per.filter(x => !x.m.optional);
+  const missed = main.length ? main.reduce((a, b) => b.rate < a.rate ? b : a) : null;
+  const subs = Object.keys(p.subs).length;
+  return `
+  <div class="grid2">
+    ${kpi('Refeições concluídas', `${done}/${plan}`, `${plan ? Math.round(done / plan * 100) : 0}% das principais`, 'green')}
+    ${kpi('Dias completos', `${full}/${n}`, 'todas as principais')}
+    ${kpi('Mais esquecida', missed ? esc(missed.m.name) : '—', missed ? `${Math.round(missed.rate * 100)}% dos dias` : '')}
+    ${kpi('Trocas salvas', String(subs), 'substituições de alimentos')}
+  </div>
+  <div class="card"><h2>Refeições por dia</h2>
+    ${barChart({ label: 'Refeições por dia', labels: keys.map(k => dayLabel(k, n)), values: st.map(s => s.done), goal: st.map(s => s.planned), min: 5, fmtAxis: v => Math.round(v), color: (v, i) => st[i].mealsOk ? C_FOOD : '#86efac', tip: i => `${keyToDate(keys[i]).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}: ${st[i].done} de ${st[i].planned} refeições` })}
+    <div class="legend"><span><i style="background:${C_FOOD}"></i>Todas</span><span><i style="background:#86efac"></i>Parcial</span><span>- - planejadas</span></div></div>
+  <div class="card"><h2>Frequência por refeição</h2>
+    ${hbars(per.map(x => ({ label: `${x.m.time} · ${x.m.name}`, value: x.c, max: n, text: `${x.c}/${n} dias`, tip: `${x.m.name}: ${Math.round(x.rate * 100)}% dos dias` })), C_FOOD)}</div>
+  <div class="card"><h2>Pontualidade</h2>
+    <p class="small mut" style="margin-top:-4px">Diferença média entre o horário programado e quando você marcou como concluída.</p>
+    <ul class="list">${per.map(x => `<li><span>${esc(x.m.name)} <span class="mut small">${x.m.time}</span></span>${x.delay == null ? '<span class="tag">Sem dados</span>' : Math.abs(x.delay) <= 15 ? '<span class="tag ok">No horário</span>' : x.delay > 0 ? `<span class="tag warn">${x.delay} min depois</span>` : `<span class="tag blue">${-x.delay} min antes</span>`}</li>`).join('')}</ul>
+    <p class="small mut">Se uma refeição costuma atrasar, ajuste o horário na aba Alimentação para combinar com sua rotina.</p></div>`;
+}
+
+function panEx(keys, st) {
+  const n = keys.length, goal = +S.profile.exercise.weeklyGoal || 150;
+  const tot = st.reduce((a, s) => a + s.exMin, 0), activeDays = st.filter(s => s.exMin > 0).length;
+  const byType = {}, byInt = { leve: 0, moderada: 0, intensa: 0 };
+  keys.forEach(k => ((S.days[k] || {}).ex || []).forEach(x => { byType[x.type] = (byType[x.type] || 0) + (+x.min || 0); byInt[x.int] = (byInt[x.int] || 0) + (+x.min || 0); }));
+  const types = Object.entries(byType).sort((a, b) => b[1] - a[1]);
+  const first = firstRecorded();
+  const weeks = []; for (let i = 3; i >= 0; i--) { const ws = weekStart(); ws.setDate(ws.getDate() - 7 * i); const end = new Date(ws); end.setDate(ws.getDate() + 6); if (dateKey(end) >= first) weeks.push(ws); }
+  const wv = weeks.map(w => weekEx(w));
+  return `
+  <div class="grid2">
+    ${kpi('Minutos no período', tot + ' min', `${n} dia${n > 1 ? 's' : ''}`, 'or')}
+    ${kpi('Dias ativos', `${activeDays}/${n}`, `${Math.round(activeDays / n * 100)}% dos dias`)}
+    ${kpi('Semana atual', `${weekEx()}/${goal}`, 'minutos ativos')}
+    ${kpi('Atividade favorita', types.length ? esc(EX[types[0][0]] || types[0][0]) : '—', types.length ? types[0][1] + ' min' : 'sem registros')}
+  </div>
+  ${tot === 0 ? '<div class="card"><div class="empty">Nenhum exercício registrado no período. Use a aba Exercícios para registrar — até 5 minutos contam.</div></div>' : `
+  <div class="card"><h2>Minutos por dia</h2>
+    ${barChart({ label: 'Exercício por dia', labels: keys.map(k => dayLabel(k, n)), values: st.map(s => s.exMin), min: 30, fmtAxis: v => Math.round(v), color: () => C_EX, tip: i => `${keyToDate(keys[i]).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}: ${st[i].exMin} min` })}</div>
+  <div class="card"><h2>Por tipo de atividade</h2>${hbars(types.map(([t, m]) => ({ label: EX[t] || t, value: m, max: types[0][1], text: m + ' min', tip: `${EX[t] || t}: ${Math.round(m / tot * 100)}% do tempo` })), C_EX)}</div>
+  <div class="card"><h2>Intensidade</h2>${hbars(Object.entries(byInt).map(([k, m]) => ({ label: INT[k], value: m, max: tot, text: `${m} min (${Math.round(m / tot * 100)}%)` })), C_EX)}</div>`}
+  ${weeks.length ? `<div class="card"><h2>Semanas × meta</h2>
+    ${barChart({ label: 'Minutos por semana', H: 150, labels: weeks.map(w => w.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })), values: wv, goal, min: goal, fmtAxis: v => Math.round(v), color: v => v >= goal ? C_FOOD : C_EX, tip: i => `Semana de ${weeks[i].toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}: ${wv[i]} de ${goal} min` })}
+    <div class="legend"><span><i style="background:${C_FOOD}"></i>Meta atingida</span><span><i style="background:${C_EX}"></i>Abaixo</span><span>- - meta semanal</span></div></div>` : ''}`;
 }
 
 /* ---------- perfil ---------- */
@@ -855,8 +1071,9 @@ function viewPerfil() {
 
 /* ---------- render ---------- */
 function render() {
-  const views = { inicio: viewInicio, agua: viewAgua, alimentacao: viewAlimentacao, historico: viewHistorico, perfil: viewPerfil };
+  const views = { inicio: viewInicio, agua: viewAgua, alimentacao: viewAlimentacao, exercicios: viewExercicios, painel: viewPainel, perfil: viewPerfil };
   $('#view').innerHTML = (views[TAB] || viewInicio)();
+  $('#tip').style.display = 'none';
   $('#tabs').innerHTML = TABS.map(([id, n, i]) => `<button class="${TAB === id ? 'on' : ''}" data-tab="${id}" aria-label="${n}">${ic(i)}${n}</button>`).join('');
   const ns = notifState(), on = ns === 'granted', paused = Date.now() < (S.profile.pausedUntil || 0);
   $('#notifChip').className = 'chip ' + (on && !paused ? 'on' : '');
@@ -882,8 +1099,15 @@ document.addEventListener('click', async e => {
     save(); closeModal(); toast(`Trocado por ${F[id].n}`); return render();
   }
   if (ds.close != null) return closeModal();
+  if (ds.psec) { PAN.sec = ds.psec; render(); return window.scrollTo(0, 0); }
+  if (ds.prange) { PAN.range = +ds.prange; return render(); }
+  if (ds.exsug != null) { const s = EX_SUG[+ds.exsug]; return addExercise(s[0], s[1], s[2]); }
+  if (ds.exint) { exForm.int = ds.exint; return render(); }
+  if (ds.delex != null) { const x = day().ex.splice(+ds.delex, 1)[0]; save(); toast(`Removido: ${EX[x.type] || x.type} ${x.min} min`); return render(); }
   switch (ds.act) {
     case 'addCustom': return addWater($('#customMl').value);
+    case 'addEx': exForm.type = $('#exType').value; exForm.min = +$('#exMin').value || exForm.min; return addExercise(exForm.type, $('#exMin').value, exForm.int);
+    case 'saveExGoal': { const v = Math.round(+$('#exGoal').value); if (!(v >= 10 && v <= 2000)) return toast('Informe entre 10 e 2000 minutos'); S.profile.exercise.weeklyGoal = v; save(); toast('Meta semanal: ' + v + ' min'); return render(); }
     case 'resume': return pauseAll(0);
     case 'cnt-': case 'cnt+': S.profile.waterCount = clamp(S.profile.waterCount + (ds.act === 'cnt+' ? 1 : -1), 3, 14); settingsChanged(); return render();
     case 'saveGoal': { const v = Math.round(+$('#goalIn').value); if (!(v >= 300 && v <= 6000)) return toast('Informe uma meta entre 300 e 6000 ml'); S.profile.waterGoal = v; S.profile.waterGoalManual = true; settingsChanged(); toast('Meta salva: ' + ml(v)); return render(); }
@@ -909,12 +1133,26 @@ document.addEventListener('change', e => {
   if (ds.set === 'waterPaused') { p.waterPaused = t.checked; settingsChanged(); return render(); }
   if (ds.set === 'mealReminderMin') { p.mealReminderMin = +t.value; settingsChanged(); return toast('Lembrete ' + t.value + ' min antes'); }
   if (ds.notif) { p.notif[ds.notif] = t.checked; settingsChanged(); return render(); }
+  if (t.id === 'exType') { exForm.type = t.value; return; }
+  if (t.id === 'exMin') { exForm.min = +t.value || exForm.min; return; }
+  if (ds.exremind) { p.exercise.remind = t.checked; settingsChanged(); toast(t.checked ? 'Lembrete de exercício ativado' : 'Lembrete de exercício desativado'); return; }
+  if (ds.extime) { if (!t.value) return; p.exercise.remindTime = t.value; settingsChanged(); return toast('Lembrete às ' + t.value); }
   const meal = id => p.meals.find(m => m.id === id);
   if (ds.mtime) { if (!t.value) return; meal(ds.mtime).time = t.value; settingsChanged(); toast('Horário atualizado para ' + t.value); return render(); }
   if (ds.menable) { meal(ds.menable).enabled = t.checked; settingsChanged(); return render(); }
   if (ds.mremind) { meal(ds.mremind).remind = t.checked; settingsChanged(); return; }
   if (ds.maway) { meal(ds.maway).away = t.checked; save(); return render(); }
 });
+document.addEventListener('click', e => {
+  const tip = $('#tip'), el = e.target.closest('[data-tip]');
+  if (!el || !el.dataset.tip) { tip.style.display = 'none'; return; }
+  tip.textContent = el.dataset.tip; tip.style.display = 'block';
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  tip.style.left = clamp(e.clientX - tw / 2, 8, window.innerWidth - tw - 8) + 'px';
+  let top = e.clientY + window.scrollY - th - 14; if (e.clientY - th - 14 < 64) top = e.clientY + window.scrollY + 18;
+  tip.style.top = top + 'px';
+});
+window.addEventListener('scroll', () => { const t = $('#tip'); if (t) t.style.display = 'none'; }, { passive: true });
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.id === 'customMl') addWater(e.target.value); });
 
 function openSwap(mealId, key, curId) {

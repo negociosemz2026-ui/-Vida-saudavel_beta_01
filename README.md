@@ -22,7 +22,13 @@ Na primeira abertura o app mostra o perfil preenchido para você conferir (falta
 - **Início**: saudação, data e hora ao vivo, água do dia × meta, próximo horário de água, próxima refeição, % do dia e resumo dos hábitos.
 - **Água**: botões +150/+250/+350/+500 ml e valor livre, barra de progresso, histórico (com remoção), horários programados com status, nº de lembretes ajustável, pausar (1h, 3h, até amanhã), meta manual ou referência calculada (peso × 30 ml + atividade + clima + rotina). Opção de restrição de líquidos por orientação médica.
 - **Alimentação**: 6 refeições com horário editável, 3 cardápios econômicos por refeição (alternam por dia), quantidades aproximadas, **trocar alimento** (só hoje ou sempre) dentro do mesmo grupo, filtros de alergia/intolerância/vegetariano/alimentos que não gosta/orçamento, dicas para levar ao trabalho/faculdade, lembrete X min antes e botão de concluída.
-- **Histórico**: gráficos de água e refeições, média, dias com meta atingida, dias com rotina cumprida, sequência e tabela diária — apenas com dados reais registrados.
+- **Exercícios**: registro rápido com sugestões leves para a rotina de trabalho/estudo, registro manual (atividade, minutos, intensidade), progresso da semana com meta editável (referência OMS 150 min, intensos contam em dobro) e lembrete opcional que só avisa se você ainda não se exercitou no dia.
+- **Painel (dashboard)**: período de 7 ou 30 dias, toque nas barras para ver valores.
+  - *Geral*: pontuação média, rotina cumprida, sequência, exercício da semana, pontuação por dia, calendário de hábitos, resumo por área e tabela diária.
+  - *Água*: média, total, dias com meta, melhor dia, água por dia × meta, horários em que você bebe, dose mais usada.
+  - *Alimentação*: refeições concluídas, dias completos, refeição mais esquecida, trocas salvas, refeições por dia, frequência e pontualidade por refeição.
+  - *Exercícios*: minutos, dias ativos, atividade favorita, minutos por dia, por tipo, por intensidade e semanas × meta.
+  Tudo calculado só com dados reais registrados.
 - **Perfil**: todos os dados editáveis, notificações, backup/restauração e apagar dados.
 
 ## Notificações — como funcionam
