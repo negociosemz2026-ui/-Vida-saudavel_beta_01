@@ -1,0 +1,37 @@
+name: Gerar APK Android
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Instalar dependências
+        run: npm install
+      - name: Criar projeto Android
+        run: |
+          npx cap add android
+          npx cap sync android
+      - name: Compilar APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+          cp app/build/outputs/apk/debug/app-debug.apk ../VidaSaudavel.apk
+      - name: Publicar APK para download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete apk-atual --yes --cleanup-tag || true
+          gh release create apk-atual VidaSaudavel.apk --title "VIDA SAUDÁVEL (APK)" --notes "Baixe VidaSaudavel.apk no celular Android e instale." --latest

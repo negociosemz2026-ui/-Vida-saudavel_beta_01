@@ -1,0 +1,10 @@
+{
+  "appId": "br.com.vidasaudavel.app",
+  "appName": "VIDA SAUDÁVEL",
+  "webDir": "www",
+  "plugins": {
+    "LocalNotifications": {
+      "iconColor": "#16a34a"
+    }
+  }
+}
